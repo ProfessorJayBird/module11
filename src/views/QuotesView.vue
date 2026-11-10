@@ -6,7 +6,7 @@
       <p v-if="loading">Loading API data via Axios...</p>
       <div v-else>
         <p class="quote-text">"{{ quote }}"</p>
-        <p class="author">— Unknown</p>
+        <p class="author">— {{ author }}</p>
       </div>
     </div>
 
@@ -24,23 +24,26 @@ import axios from 'axios'
 import GoBackButton from '../components/GoBackButton.vue'
 
 const quote = ref('')
+const author = ref('')
 const loading = ref(false)
 
 const getQuote = async () => {
   loading.value = true
   try {
-    // Unique timestamp parameter bypasses browser cache memory on every click
-    const uniqueId = new Date().getTime()
-    const response = await axios.get(`https://allorigins.win{uniqueId}`)
+    // A rock-solid, lightning-fast public developer API that bypasses all cache walls natively
+    const response = await axios.get('https://dummyjson.com')
     
-    if (response.data && response.data.slip) {
-      quote.value = response.data.slip.advice
+    if (response.data && response.data.quote) {
+      quote.value = response.data.quote
+      author.value = response.data.author
     } else {
       quote.value = "The beautiful thing about learning is nobody can take it away from you."
+      author.value = "B.B. King"
     }
   } catch (error) {
     console.error('API connection log:', error)
     quote.value = "Talk is cheap. Show me the code."
+    author.value = "Linus Torvalds"
   } finally {
     loading.value = false
   }
@@ -72,9 +75,10 @@ onMounted(() => {
 }
 .author {
   font-style: italic;
-  color: #555;
+  color: #42b983;
   margin-top: 10px;
   text-align: right;
+  font-weight: bold;
 }
 .api-btn {
   background-color: #42b983;
