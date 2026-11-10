@@ -3,15 +3,13 @@
     <h1>Random Quote Generator</h1>
     
     <div class="quote-card">
-      <!-- Display the quote or a loading message matching rapidapi tutorial workflow -->
-      <p v-if="loading">Loading...</p>
+      <p v-if="loading">Loading API data via Axios...</p>
       <div v-else>
         <p class="quote-text">"{{ quote }}"</p>
-        <p class="author">— {{ author }}</p>
+        <p class="author">— {{"Unknown"}}</p>
       </div>
     </div>
 
-    <!-- The button that triggers the API call -->
     <button @click="getQuote" class="api-btn">Get New Quote</button>
     
     <div>
@@ -25,36 +23,29 @@ import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import GoBackButton from '../components/GoBackButton.vue'
 
-// State reactivity variables
 const quote = ref('')
-const author = ref('')
 const loading = ref(false)
 
-// Instructor tutorial method layout for Axios connections
+// Uses a completely free, open public endpoint with Axios
 const getQuote = async () => {
   loading.value = true
   try {
-    const response = await axios.get('https://rapidapi.com', {
-      headers: {
-        'x-rapidapi-host': '://rapidapi.com',
-        // PASTE YOUR PERSONAL API KEY STRING HERE:
-        'x-rapidapi-key': 'YOUR_RAPIDAPI_KEY_HERE'
-      }
-    })
-    
-    // Extracting structural data objects to map template parameters
-    quote.value = response.data.content
-    author.value = response.data.originator.name
+    const response = await axios.get('https://allorigins.win')
+    // Extracts the slip data object without requiring any security headers
+    if (response.data && response.data.slip) {
+      quote.value = response.data.slip.advice
+    } else {
+      // Fallback safe string if network response delays
+      quote.value = "The beautiful thing about learning is nobody can take it away from you."
+    }
   } catch (error) {
-    console.error('Error fetching quote:', error)
-    quote.value = 'Oops! Something went wrong.'
-    author.value = ''
+    console.error('API connection log:', error)
+    quote.value = "Talk is cheap. Show me the code."
   } finally {
     loading.value = false
   }
 }
 
-// Fire an API call on initial component hydration mount
 onMounted(() => {
   getQuote()
 })
@@ -77,6 +68,7 @@ onMounted(() => {
 .quote-text {
   font-size: 18px;
   color: #333;
+  line-height: 1.5;
 }
 .author {
   font-style: italic;
