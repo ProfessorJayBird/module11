@@ -5,15 +5,15 @@ import ContactView from '../views/ContactView.vue'
 import NotFound from '../views/NotFound.vue'
 
 const routes = [
-  { path: '/', redirect: '/about' }, // Set about page as default entry
+  { path: '/', redirect: '/about' },
   { path: '/about', component: AboutView },
   { path: '/quotes', component: QuotesView },
   { path: '/contact', component: ContactView },
-  { path: '/:pathMatch(.*)*', component: NotFound } // Catch-all 404
+  { path: '/:pathMatch(.*)*', component: NotFound }
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(), // Required for GitHub Pages to work
+  history: createWebHashHistory(),
   routes
 })
 
