@@ -6,7 +6,7 @@
       <p v-if="loading">Loading API data via Axios...</p>
       <div v-else>
         <p class="quote-text">"{{ quote }}"</p>
-        <p class="author">— {{"Unknown"}}</p>
+        <p class="author">— Unknown</p>
       </div>
     </div>
 
@@ -17,6 +17,7 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
@@ -28,7 +29,7 @@ const loading = ref(false)
 const getQuote = async () => {
   loading.value = true
   try {
-    // Adding `&cb=` with a unique timestamp forces the browser to bypass its cache memory
+    // Unique timestamp parameter bypasses browser cache memory on every click
     const uniqueId = new Date().getTime()
     const response = await axios.get(`https://allorigins.win{uniqueId}`)
     
@@ -44,12 +45,6 @@ const getQuote = async () => {
     loading.value = false
   }
 }
-
-onMounted(() => {
-  getQuote()
-})
-</script>
-
 
 onMounted(() => {
   getQuote()
