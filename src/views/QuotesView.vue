@@ -17,7 +17,6 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
@@ -26,16 +25,16 @@ import GoBackButton from '../components/GoBackButton.vue'
 const quote = ref('')
 const loading = ref(false)
 
-// Uses a completely free, open public endpoint with Axios
 const getQuote = async () => {
   loading.value = true
   try {
-    const response = await axios.get('https://allorigins.win')
-    // Extracts the slip data object without requiring any security headers
+    // Adding `&cb=` with a unique timestamp forces the browser to bypass its cache memory
+    const uniqueId = new Date().getTime()
+    const response = await axios.get(`https://allorigins.win{uniqueId}`)
+    
     if (response.data && response.data.slip) {
       quote.value = response.data.slip.advice
     } else {
-      // Fallback safe string if network response delays
       quote.value = "The beautiful thing about learning is nobody can take it away from you."
     }
   } catch (error) {
@@ -45,6 +44,12 @@ const getQuote = async () => {
     loading.value = false
   }
 }
+
+onMounted(() => {
+  getQuote()
+})
+</script>
+
 
 onMounted(() => {
   getQuote()
